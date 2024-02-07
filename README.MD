@@ -1,5 +1,7 @@
 # Documentation
 
+This repository is fork of https://github.com/jiripech/timesheets.
+
 ## First Steps
 
 1. Install Gitlab API client gem
@@ -16,7 +18,16 @@ GITLAB_API_ENDPOINT="https://gitlab.com/api/v4" (or address of your Gitlab insta
 GITLAB_GROUP="your_group"
 OUTFILE="Timesheets.csv" 
 FIELD_DELIMITER=";"
+MG_API_KEY="mailgun_api_key_..."
+MG_DOMAIN="mg.sender.domain"
+FROM_ADDRESS="some.sender@your.domain"
+TO_ADDRESS="some.recipient@your.domain"
 ```
+
+## Added functionality
+
+1. Ability to send genereated file to email address using Mailgun service
+2. Docker image with cron
 
 ## Gitlab API Client
 

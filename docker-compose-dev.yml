@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  app:
+    image: ruby:3.2.3-slim
+    container_name: ruby-timesheets-dev
+    command: tail -f /dev/null # workaround, so container would not exit immediately
+    working_dir: /usr/src/ruby-timesheets
+    environment:
+      - GITLAB_API_PRIVATE_TOKEN
+      - GITLAB_API_ENDPOINT
+      - GITLAB_GROUP
+      - OUTFILE
+      - FIELD_DELIMITER
+      - MG_API_KEY
+      - MG_DOMAIN
+      - FROM_ADDRESS
+      - TO_ADDRESS
+    volumes:
+      - .:/usr/src/ruby-timesheets

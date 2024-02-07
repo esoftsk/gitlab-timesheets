@@ -1,5 +1,6 @@
 require "gitlab"
 require "csv"
+require 'mailgun-ruby'
 
 def put_time_estimation(stats)
   if stats.human_time_estimate.nil?
@@ -28,6 +29,26 @@ def minutes_from_note(note)
 
   return -1 * minutes if note.start_with?("sub") # if we are substracting time then return negative value
   return minutes # positive value otherwise
+end
+
+def send_file_via_email(file_path)
+  # Initialize the Mailgun client with your API key and domain
+  mg_client = Mailgun::Client.new ENV['MG_API_KEY'], 'api.eu.mailgun.net'
+
+  # Compose the email using MessageBuilder
+  mb_obj = Mailgun::MessageBuilder.new
+  mb_obj.from(ENV['FROM_ADDRESS'])
+  mb_obj.add_recipient(:to, ENV['TO_ADDRESS'])
+  mb_obj.subject('Latest reports from GitLab')
+  mb_obj.body_text('CSV file with data is attached.')
+  mb_obj.add_attachment(file_path)
+
+  # Send the email with the file attachment
+  mg_client.send_message(ENV['MG_DOMAIN'], mb_obj)
+
+  puts "Email sent successfully"
+rescue => e
+  puts "Error sending email: #{e.message}"
 end
 
 Gitlab.configure do |config|
@@ -138,3 +159,5 @@ CSV.open(
       end
     end
 end
+
+send_file_via_email(outfile)
